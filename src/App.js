@@ -7,6 +7,7 @@ import {
 } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import InfoBox from "./components/InfoBox";
+import LineGraph from "./components/LineGraph";
 import Table from "./components/Table";
 import { sortData } from "./components/util";
 import "./css/App.css";
@@ -34,7 +35,6 @@ const App = () => {
             name: country.country,
             value: country.countryInfo.iso2,
           }));
-
           const sortedData = sortData(data);
           setTableData(sortedData);
           setCountries(countries);
@@ -46,12 +46,10 @@ const App = () => {
   const onCountryChange = async (event) => {
     const countryCode = event.target.value;
     setCountry(countryCode);
-
     const url =
       countryCode === "worldwide"
         ? "https://disease.sh/v3/covid-19/all"
         : `https://disease.sh/v3/covid-19/countries/${countryCode}`;
-
     await fetch(url)
       .then((response) => response.json())
       .then((data) => {
@@ -60,15 +58,15 @@ const App = () => {
       });
   };
   return (
-    <div className="App">
+    <div className="app">
       <div className="app__left">
         <div className="app__header">
           <h1>COVID-19 TRACKER</h1>
           <FormControl className="app__dropdown">
             <Select
               variant="outlined"
-              onChange={onCountryChange}
               value={country}
+              onChange={onCountryChange}
             >
               <MenuItem value="worldwide">Worldwide</MenuItem>
               {countries.map((country) => (
@@ -102,6 +100,7 @@ const App = () => {
           <h3>Live cases by country</h3>
           <Table countries={tableData} />
           <h3>Worldwide new cases</h3>
+          <LineGraph casesType="cases" />
         </CardContent>
       </Card>
     </div>
