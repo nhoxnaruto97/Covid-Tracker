@@ -38,6 +38,7 @@ const App = () => {
         .then((response) => response.json())
         .then((data) => {
           const countries = data.map((country) => ({
+            id: country.countryInfo._id,
             name: country.country,
             value: country.countryInfo.iso2,
           }));
@@ -79,7 +80,9 @@ const App = () => {
             >
               <MenuItem value="worldwide">Worldwide</MenuItem>
               {countries.map((country) => (
-                <MenuItem value={country.value}>{country.name}</MenuItem>
+                <MenuItem key={country.name} value={country.value}>
+                  {country.name}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -122,7 +125,8 @@ const App = () => {
       <Card className="app__right">
         <CardContent>
           <h3>Live cases by country</h3>
-          <Table countries={tableData} />
+          <Table cases="cases" countries={tableData} />
+
           <h3>Worldwide new {casesType}</h3>
           <LineGraph casesType={casesType} />
         </CardContent>
